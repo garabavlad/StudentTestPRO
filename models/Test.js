@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
 
 const ContactSchema = mongoose.Schema({
-	name  : {
+	name     : {
 		type     : String,
 		required : true
 	},
-	parts : {
+	subtests : {
 		type     : mongoose.Schema.Types.Mixed,
-		// type     : String,
-		// body     : String,
-		// answers  : [],
-		// correct  : [],
 		required : true
 	}
 });

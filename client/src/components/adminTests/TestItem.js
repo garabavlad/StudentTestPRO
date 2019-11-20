@@ -5,8 +5,8 @@ import AdminContext from '../../context/adminTest/adminContext';
 const TestItem = (props) => {
 	const adminContext = useContext(AdminContext);
 
-	const { _id, name, parts } = props.test;
-	const { body, answers, correct } = parts;
+	const { _id, name, subtests } = props.test;
+	// const { body, answers, correct } = parts;
 
 	const { deleteTest, setCurrent, clearCurrent } = adminContext;
 
@@ -23,24 +23,15 @@ const TestItem = (props) => {
 		<div className='card bg-light'>
 			<h3 className='text-left text-primary'>{name} </h3>
 			<ul className='list'>
-				{body && (
-					<li>
-						<i className='fas fa-file-alt' />{' '}
-						{body.length > 250 ? body.substring(0, 250) + ' (more...)' : body}
-					</li>
-				)}
-				<br />
 				<li>
-					<i className='fas fa-tasks' />{' '}
-					<u>
-						<b>Answers:</b>
-					</u>
+					<i className='fas fa-tasks' /> <b>Subteste: {subtests.length}</b>
 				</li>
 				<li>
 					<ul className='list answer-list'>
-						{answers.map((ans, index) => (
+						{subtests.map((sbt, index) => (
 							<li key={index}>
-								<i className={correct[index] ? 'fas fa-check' : 'fas fa-times'} /> {' ' + ans}
+								<i className='fas fa-file-alt' />{' '}
+								{sbt.body.length < 60 ? sbt.body : sbt.body.substring(0, 60) + ' ...'}
 							</li>
 						))}
 					</ul>
@@ -48,10 +39,10 @@ const TestItem = (props) => {
 			</ul>
 			<p>
 				<button className='btn btn-dark btn-sm' onClick={onClickEdit}>
-					Edit
+					Detalii
 				</button>
 				<button className='btn btn-danger btn-sm' onClick={onClickDelete}>
-					Delete
+					Sterge
 				</button>
 			</p>
 		</div>

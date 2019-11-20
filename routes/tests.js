@@ -35,19 +35,13 @@ router.post('/', [ auth, [ check('name', 'Please enter a valid name').not().isEm
 		return res.status(400).json({ errors: errs.array() });
 	}
 
-	const { name, parts } = req.body;
-	const { type, body, answers, correct } = parts;
+	const { name, subtests } = req.body;
 
 	try {
 		//creating new contact
 		const newContact = new Test({
 			name,
-			parts : {
-				type,
-				body,
-				answers,
-				correct
-			}
+			subtests
 		});
 
 		const contact = await newContact.save();
@@ -69,8 +63,7 @@ router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().is
 	//validation result
 	const errs = validationResult(req);
 	if (!errs.isEmpty()) {
-		// return res.status(400).json({ errors: errs.array() });
-		return res.send('fuuck');
+		return res.status(400).json({ errors: errs.array() });
 	}
 
 	try {
@@ -84,11 +77,11 @@ router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().is
 		// 	return res.status(400).json({ msg: 'Not authorized' });
 		// }
 
-		const { name, parts } = req.body;
+		const { name, subtests } = req.body;
 
 		const contactFields = {};
 		if (name) contactFields.name = name;
-		if (parts) contactFields.parts = parts;
+		if (subtests) contactFields.subtests = subtests;
 
 		await Test.findByIdAndUpdate(req.params.id, { $set: contactFields }, { new: true });
 

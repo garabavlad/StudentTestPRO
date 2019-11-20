@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect, Fragment } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AdminContext from '../../context/adminTest/adminContext';
+import Subtest from './Subtest';
 
 const TestForm = () => {
 	const adminContext = useContext(AdminContext);
@@ -8,23 +9,18 @@ const TestForm = () => {
 	useEffect(
 		() => {
 			if (current !== null) {
-				const { name, parts } = current;
-				const { body, answers, correct } = parts;
-
-				// Distructuring the object to fit our state
-				setTest({
-					name,
-					body,
-					answers,
-					correct
-				});
+				setTest(current);
 			}
 			else {
 				setTest({
-					name    : '',
-					body    : '',
-					answers : [ '', '' ],
-					correct : [ false, false ]
+					name     : '',
+					subtests : [
+						{
+							body    : '',
+							answers : [ '', '' ],
+							correct : [ false, false ]
+						}
+					]
 				});
 			}
 		},
@@ -32,55 +28,89 @@ const TestForm = () => {
 	);
 
 	const [ test, setTest ] = useState({
-		name    : '',
-		body    : '',
-		answers : [ '', '' ],
-		correct : [ false, false ]
+		name     : '',
+		subtests : [
+			{
+				body    : '',
+				answers : [ '', '' ],
+				correct : [ false, false ]
+			}
+		]
 	});
 
-	const { name, body, answers, correct } = test;
+	const { name, subtests } = test;
 
-	// For Title and Body inputs
+	// For Title input
 	const onChange = (e) => setTest({ ...test, [e.target.name]: e.target.value });
-	//Special handle for answers
-	const onChangeAnswer = (e) => {
-		answers[e.target.name] = e.target.value;
-		setTest({ ...test, answers });
-	};
-	//Handling the answers checkboxes
-	const onChangeChecking = (e) => {
-		correct[e.target.name] = !correct[e.target.name];
-		setTest({ ...test, correct });
+	//Handling subtest bodies
+	const onChangeSubtestBody = (e, index) =>
+		setTest({
+			...test,
+			subtests : subtests.map((sbt, i) => {
+				if (index !== i) {
+					return sbt;
+				}
+				else {
+					return {
+						...sbt,
+						body : e.target.value
+					};
+				}
+			})
+		});
+	//Handling subtest answers inputs
+	const onChangeSubtestAnswer = (e, index, aIndex) =>
+		setTest({
+			...test,
+			subtests : subtests.map((sbt, i) => {
+				if (index !== i) {
+					return sbt;
+				}
+				else {
+					const { answers } = sbt;
+					answers[aIndex] = e.target.value;
+					return {
+						...sbt,
+						answers
+					};
+				}
+			})
+		});
+	//Handling the subtest answers checkboxes
+	const onChangeSubtestChecking = (e, index, aIndex) => {
+		setTest({
+			...test,
+			subtests : subtests.map((sbt, i) => {
+				if (index !== i) {
+					return sbt;
+				}
+				else {
+					const { correct } = sbt;
+					correct[aIndex] = !correct[aIndex];
+					return {
+						...sbt,
+						correct
+					};
+				}
+			})
+		});
 	};
 
 	// When we submit
 	const onSubmit = (e) => {
 		e.preventDefault();
 
-		// we do the opposite of what we did in the useEffect:
-		// here we recreate the object to the db standard
-		let dbObj = {
-			name  : test.name,
-			parts : {
-				body    : test.body,
-				answers : test.answers,
-				correct : test.correct
-			}
-		};
-
 		if (current !== null) {
-			dbObj = {
+			setTest({
 				_id : current._id,
-				...dbObj
-			};
-		}
+				...test
+			});
 
-		if (current !== null) {
-			updateTest(dbObj);
+			updateTest(test);
 			clearCurrent();
 		}
 		else {
-			addTest(dbObj);
+			addTest(test);
 		}
 	};
 
@@ -88,51 +118,63 @@ const TestForm = () => {
 		clearCurrent();
 	};
 
-	//For new answers
-	const onClickAddAnswer = () => {
-		setTest({ ...test, answers: [ ...answers, '' ], correct: [ ...correct, false ] });
-	};
+	//For new subtest answers
+	const onClickAddAnswer = (index) =>
+		setTest({
+			...test,
+			subtests : subtests.map((sbt, i) => {
+				if (index !== i) {
+					return sbt;
+				}
+				else {
+					const { answers, correct } = sbt;
+					return {
+						...sbt,
+						answers : [ ...answers, '' ],
+						correct : [ ...correct, false ]
+					};
+				}
+			})
+		});
+
+	//For new subtests
+	const onClickAddSubtest = () =>
+		setTest({
+			...test,
+			subtests : [
+				...subtests,
+				{
+					body    : '',
+					answers : [ '', '' ],
+					correct : [ false, false ]
+				}
+			]
+		});
 
 	return (
 		<form onSubmit={onSubmit}>
 			<h2 className='text-primary'>{current ? 'Redactare test' : 'Test nou'}</h2>
 			<input type='text' name='name' required placeholder='Titlu test' value={name} onChange={onChange} />
-			<textarea
-				name='body'
-				value={body}
-				className='textarea-test'
-				placeholder='Cuprinsul testului...'
-				required
-				onChange={onChange}
-			/>
 			<br />
-			<label value='Raspunsuri:' />
-			{answers.map((ans, index) => (
-				<Fragment key={index}>
-					<input
-						type='text'
-						name={index}
-						required
-						placeholder={'Raspunsul ' + (index + 1).toString()}
-						value={answers[index]}
-						onChange={onChangeAnswer}
-						className='input answer'
+
+			{subtests &&
+				subtests.map((subtest, index) => (
+					<Subtest
+						subtest={subtest}
+						key={index}
+						index={index}
+						onClickAddAnswer={onClickAddAnswer}
+						onChangeSubtestChecking={onChangeSubtestChecking}
+						onChangeSubtestAnswer={onChangeSubtestAnswer}
+						onChangeSubtestBody={onChangeSubtestBody}
 					/>
-					<input
-						type='checkbox'
-						name={index}
-						value='unic'
-						checked={correct[index]}
-						onChange={onChangeChecking}
-					/>
-				</Fragment>
-			))}
-			<br />
+				))}
 			<i
-				className='fas fa-plus'
-				style={{ fontSize: 30, marginLeft: '47%', marginBottom: '20px' }}
-				onClick={onClickAddAnswer}
+				className='fas fa-text-height'
+				style={{ fontSize: 30, marginLeft: '47%', marginBottom: '20px', cursor: 'pointer' }}
+				onClick={onClickAddSubtest}
 			/>
+
 			<h5>Nota: Raspunsurile bifate sunt cele care se considera adevarate!</h5>
 			<div>
 				<input

@@ -2,7 +2,8 @@
 
 /* Global Styles */
 :root {
-  --primary-color: #00768b;
+  /* --primary-color: #00768b; */
+  --primary-color: radial-gradient(circle, rgba(86,43,106,1) 0%, rgba(0,118,139,1) 60%);
   --dark-color: #272525;
   --light-color: #f1f1f1;
   --danger-color: #911e2a;
@@ -468,13 +469,13 @@ table th {
 
 .textarea-test{
   resize: vertical;
-  min-height: 180px;
+  min-height: 150px;
 }
 
 body {font-family: Arial, Helvetica, sans-serif;}
 
 /* The Modal (background) */
-.assignmentModal {
+.assignmentModal, .resultsModal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -516,15 +517,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* The Close Button */
-.modal-close {
+.modal-close-assig, .modal-close-res {
   color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.modal-close:hover,
-.modal-close:focus {
+.modal-close-assig:hover, .modal-close-res:hover,
+.modal-close-assig:focus, .modal-close-res:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -532,9 +533,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 .modal-header {
   padding: 2px 16px;
-  background-color: var(--primary-color);
+  background-color: #00768b;
   color: white;
 }
 
 .modal-body {padding: 2px 16px;}
+
+/* SPOILER STUFF */
+input[id^="spoiler"]{
+  display: none;
+ }
+ /* //button */
+ input[id^="spoiler"] + label {
+   display: block;
+   width: 90%;
+   margin: 0 auto;
+   background: var(--primary-color);
+   color: #fff;
+   text-align: center;
+   font-size: inherit;
+   padding: 5px;
+   cursor: pointer;
+   transition: all .3s;
+ }
+ input[id^="spoiler"]:checked + label {
+   color: #333;
+   background: #ccc;
+   font-size: 14px;
+   width: 70%;
+ }
+ input[id^="spoiler"] ~ .spoiler {
+   width: 99%;
+   height: 0;
+   overflow: hidden;
+   opacity: 0;
+   margin: 1px auto 10px; 
+   /* padding: 10px;  */
+   background: #eee;
+   border: 1px solid #ccc;
+   transition: all .3s;
+ }
+ input[id^="spoiler"]:checked + label + .spoiler{
+   height: auto;
+   opacity: 1;
+   padding: 10px;
+ }
+ 
 

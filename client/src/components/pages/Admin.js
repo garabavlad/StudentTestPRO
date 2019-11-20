@@ -8,6 +8,7 @@ import AuthContext from '../../context/auth/authContext';
 import AssignmentButton from '../asignments/AssignmentButton';
 import AssignmentModal from '../asignments/AssignmentModal';
 import ResultsButton from '../results/ResultsButton';
+import ResultsModal from '../results/ResultsModal';
 //import AlertContext from '../../context/alert/alertContext';
 
 export const Admin = (props) => {
@@ -35,6 +36,7 @@ export const Admin = (props) => {
 	return (
 		<Fragment>
 			<AssignmentModal />
+			<ResultsModal />
 
 			<div className='grid-2'>
 				<div>
@@ -53,21 +55,36 @@ export const Admin = (props) => {
 
 // function for hadling the assignment modal
 const handleModal = () => {
-	let modal = document.getElementById('assignmentModal');
-	let btn = document.getElementById('assignmentProc');
-	let span = document.getElementsByClassName('modal-close')[0];
+	// for assignment modal
+	let assignmentModal = document.getElementById('assignmentModal');
+	let assignmentBtn = document.getElementById('assignmentProc');
+	let assignmentClose = document.getElementsByClassName('modal-close-assig')[0];
 
-	btn.onclick = function() {
-		modal.style.display = 'block';
+	assignmentBtn.onclick = function() {
+		assignmentModal.style.display = 'block';
 	};
 
-	span.onclick = function() {
-		modal.style.display = 'none';
+	assignmentClose.onclick = function() {
+		assignmentModal.style.display = 'none';
+	};
+
+	// for result modal
+	let resultsModal = document.getElementById('resultsModal');
+	let resultsBtn = document.getElementById('resultsProc');
+	let resultsClose = document.getElementsByClassName('modal-close-res')[0];
+
+	resultsBtn.onclick = function() {
+		resultsModal.style.display = 'block';
+	};
+
+	resultsClose.onclick = function() {
+		resultsModal.style.display = 'none';
 	};
 
 	window.onclick = function(event) {
-		if (event.target === modal) {
-			modal.style.display = 'none';
+		if (event.target === assignmentModal || event.target === resultsModal) {
+			resultsModal.style.display = 'none';
+			assignmentModal.style.display = 'none';
 		}
 	};
 };
