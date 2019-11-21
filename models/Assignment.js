@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const AsignmentSchema = mongoose.Schema({
+const AssignmentSchema = mongoose.Schema({
 	user : {
 		type : mongoose.Schema.Types.ObjectId,
 		ref  : 'users'
@@ -11,4 +11,4 @@ const AsignmentSchema = mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('asignment', AsignmentSchema);
+module.exports = mongoose.model('assignment', AssignmentSchema);

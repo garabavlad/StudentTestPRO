@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const auth = require('../middleware/auth');
 
 const User = require('../models/User');
 
@@ -76,5 +77,27 @@ router.post(
 		}
 	}
 );
+
+// @route       GET api/users
+// @desc        Get users list
+// @access      Admin
+router.get('/', auth, async (req, res) => {
+	try {
+		if (!req.user.isAdmin) {
+			throw new Error('user is not admin');
+		}
+		const users = await User.find({}).sort({ name: -1 });
+
+		let noAdminUsers = [];
+		users.map((usr) => {
+			if (!usr.isAdmin) noAdminUsers.push(usr);
+		});
+
+		return res.json(noAdminUsers);
+	} catch (err) {
+		console.error(err.message);
+		return res.status(500).send('Server Error: get api tests');
+	}
+});
 
 module.exports = router;

@@ -1,15 +1,16 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Fragment } from 'react';
 
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
-import ContactContext from '../../context/contact/contactContext';
+import AdminContext from '../../context/adminTest/adminContext';
+import Spinner from '../layouts/Spinner';
 
 const Home = (props) => {
 	const authContext = useContext(AuthContext);
 	const alertContext = useContext(AlertContext);
-	const contactContext = useContext(ContactContext);
+	const contactContext = useContext(AdminContext);
 
-	const { error, clearErrors } = contactContext;
+	const { error, clearErrors, loading } = contactContext;
 	const { setAlert } = alertContext;
 	const { loadUser, isAdmin } = authContext;
 
@@ -29,7 +30,15 @@ const Home = (props) => {
 		[ error, isAdmin ]
 	);
 
-	return <div className='card bg-light text-center'>Momentan, nu ti s-a atribuit nici un test</div>;
+	return (
+		<Fragment>
+			{true && !loading ? (
+				<div className='card bg-light text-center'>Momentan, nu ti s-a atribuit nici un test</div>
+			) : (
+				<Spinner />
+			)}
+		</Fragment>
+	);
 };
 
 export default Home;

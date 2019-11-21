@@ -15,7 +15,7 @@ const Tests = () => {
 			getTests();
 		},
 		// eslint-disable-next-line
-		[]
+		[ tests ]
 	);
 
 	if (tests && tests.length === 0 && !loading) {

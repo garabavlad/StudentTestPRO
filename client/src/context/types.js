@@ -13,7 +13,7 @@ export const FILTER_TESTS = 'FILTER_TESTS';
 export const TESTS_FAIL = 'TESTS_FAIL';
 export const CLEAR_TESTS = 'CLEAR_TESTS';
 export const GET_TESTS = 'GET_TESTS';
-
+export const GET_USERS = 'GET_USERS';
 export const SET_CURRENT = 'SET_CURRENT';
 export const CLEAR_CURRENT = 'CLEAR_CURRENT';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
