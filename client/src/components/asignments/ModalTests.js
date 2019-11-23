@@ -9,6 +9,7 @@ const ModalTests = (props) => {
 					<li key={test._id}>
 						<input
 							type='checkbox'
+							value={test._id}
 							checked={selected.find((id) => id === test._id)}
 							onChange={onChange.bind(this, test._id)}
 						/>

@@ -7,7 +7,12 @@ const ModalUsers = (props) => {
 			{users &&
 				users.map((usr) => (
 					<li key={usr._id}>
-						<input type='radio' checked={selected === usr._id} onChange={onChange.bind(this, usr._id)} />
+						<input
+							type='radio'
+							value={usr._id}
+							checked={selected === usr._id}
+							onChange={onChange.bind(this, usr._id)}
+						/>
 						<span style={{ marginLeft: '5px', fontSize: '18px' }}>{' ' + usr.name}</span>
 					</li>
 				))}

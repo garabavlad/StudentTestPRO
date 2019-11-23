@@ -4,7 +4,7 @@ import Subtest from './Subtest';
 
 const TestForm = () => {
 	const adminContext = useContext(AdminContext);
-	const { addTest, updateTest, current, clearCurrent } = adminContext;
+	const { addTest, updateTest, current, clearCurrent, tests } = adminContext;
 
 	useEffect(
 		() => {
@@ -24,7 +24,7 @@ const TestForm = () => {
 				});
 			}
 		},
-		[ adminContext, current ]
+		[ current, tests ]
 	);
 
 	const [ test, setTest ] = useState({
@@ -41,7 +41,7 @@ const TestForm = () => {
 	const { name, subtests } = test;
 
 	// For Title input
-	const onChange = (e) => setTest({ ...test, [e.target.name]: e.target.value });
+	const onChange = (e) => setTest({ ...test, name: e.target.value });
 	//Handling subtest bodies
 	const onChangeSubtestBody = (e, index) =>
 		setTest({

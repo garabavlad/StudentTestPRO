@@ -18,9 +18,10 @@ export default (state, action) => {
 			};
 
 		case GET_ASSIGNMENT:
+			const assigs = action.payload[0] ? action.payload[0].testList : null;
 			return {
 				...state,
-				assignments : action.payload,
+				assignments : assigs,
 				loading     : false
 			};
 
