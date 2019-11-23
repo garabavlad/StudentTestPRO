@@ -1,36 +1,27 @@
 import React, { useReducer } from 'react';
 import axios from 'axios';
-import adminContext from './adminContext';
-import adminReducer from './adminReducer';
+import assignmentContext from './assignmentsContext';
+import assignmentReducer from './assignmentsReducer';
 import {
-	ADD_TEST,
-	DELETE_TEST,
-	UPDATE_TEST,
-	FILTER_TESTS,
-	TESTS_FAIL,
-	CLEAR_TESTS,
-	GET_TESTS,
-	SET_CURRENT,
-	CLEAR_CURRENT,
-	CLEAR_FILTER,
+	ADD_ASSIGNMENT,
+	DELETE_ASSIGNMENT,
+	GET_ASSIGNMENT,
+	CLEAR_ASSIGNMENT,
 	CLEAR_ERRORS,
-	GET_USERS
+	ASSIGNMENTS_FAIL
 } from '../types';
 
-const AdminState = (props) => {
+const AssignmentState = (props) => {
 	const initialState = {
-		tests      : null,
-		current    : null,
-		filtered   : null,
-		error      : null,
-		loading    : true,
-		users_list : null
+		assignments : null,
+		error       : null,
+		loading     : true
 	};
 
-	const [ state, dispatch ] = useReducer(adminReducer, initialState);
+	const [ state, dispatch ] = useReducer(assignmentReducer, initialState);
 
-	//ADD TEST
-	const addTest = async (test) => {
+	//ADD ASSIGNMENT
+	const addAssignment = async (user, test) => {
 		const config = {
 			headers : {
 				'Content-Type' : 'application/json'
@@ -38,84 +29,35 @@ const AdminState = (props) => {
 		};
 
 		try {
-			const res = await axios.post('/api/tests', test, config);
+			const res = await axios.post('/api/assignments', { user, test }, config);
 
-			dispatch({ type: ADD_TEST, payload: res.data });
+			dispatch({ type: ADD_ASSIGNMENT, payload: res.data });
 		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: ASSIGNMENTS_FAIL, payload: err.response.data.msg });
 		}
 	};
 
-	//GET TESTS
-	const getTests = async () => {
+	//GET ASSIGNMENTS
+	const getAssignments = async (_id) => {
 		try {
-			const res = await axios.get('/api/tests');
+			const res = await axios.get(`/api/assignments/${_id}`);
 
-			dispatch({ type: GET_TESTS, payload: res.data });
+			dispatch({ type: GET_ASSIGNMENT, payload: res.data });
 		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: ASSIGNMENTS_FAIL, payload: err.response.data.msg });
 		}
 	};
 
-	//GET USERS (NO ADMINS)
-	const getUsers = async () => {
+	//DELETE ASSIGNMENT
+	const deleteAssignment = async (_id) => {
 		try {
-			const res = await axios.get('/api/users');
+			const res = await axios.delete(`/api/assignments/${_id}`);
 
-			dispatch({ type: GET_USERS, payload: res.data });
+			dispatch({ type: DELETE_ASSIGNMENT, payload: res.data, _id: _id });
+			getAssignments();
 		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: ASSIGNMENTS_FAIL, payload: err.response.data.msg });
 		}
-	};
-
-	//DELETE TEST
-	const deleteTest = async (_id) => {
-		try {
-			const res = await axios.delete(`/api/tests/${_id}`);
-
-			dispatch({ type: DELETE_TEST, payload: res.data, _id: _id });
-			getTests();
-		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
-		}
-	};
-
-	//UPDATE TEST
-	const updateTest = async (test) => {
-		try {
-			const config = {
-				headers : {
-					'Content-Type' : 'application/json'
-				}
-			};
-
-			const res = await axios.put(`/api/tests/${test._id}`, test, config);
-
-			dispatch({ type: UPDATE_TEST, payload: res.data });
-			getTests();
-		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
-		}
-	};
-
-	//SET CURRENT TEST
-	const setCurrent = (test) => {
-		dispatch({ type: SET_CURRENT, payload: test });
-	};
-
-	//CLEAR CURRENT TEST
-	const clearCurrent = () => {
-		dispatch({ type: CLEAR_CURRENT });
-	};
-
-	//FILTER TESTS
-	const filterTests = (text) => {
-		dispatch({ type: FILTER_TESTS, payload: text });
-	};
-
-	//CLEAR FILTER
-	const clearFilter = () => {
-		dispatch({ type: CLEAR_FILTER });
 	};
 
 	//CLEAR ERRORS
@@ -124,35 +66,27 @@ const AdminState = (props) => {
 	};
 
 	//CLEAR TESTS or  ON LOGOUT
-	const clearTests = () => {
-		dispatch({ type: CLEAR_TESTS });
+	const clearAssignments = () => {
+		dispatch({ type: CLEAR_ASSIGNMENT });
 	};
 
 	return (
-		<adminContext.Provider
+		<assignmentContext.Provider
 			value={{
-				tests        : state.tests,
-				current      : state.current,
-				filtered     : state.filtered,
-				error        : state.error,
-				loading      : state.loading,
-				users_list   : state.users_list,
+				assignments      : state.assignments,
+				current          : state.current,
+				error            : state.error,
+				loading          : state.loading,
 
-				addTest,
-				deleteTest,
-				setCurrent,
-				clearCurrent,
-				updateTest,
-				filterTests,
-				clearFilter,
-				getTests,
-				clearErrors,
-				clearTests,
-				getUsers
+				addAssignment,
+				deleteAssignment,
+				getAssignments,
+				clearAssignments,
+				clearErrors
 			}}>
 			{props.children}
-		</adminContext.Provider>
+		</assignmentContext.Provider>
 	);
 };
 
-export default AdminState;
+export default AssignmentState;

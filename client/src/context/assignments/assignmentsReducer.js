@@ -1,80 +1,41 @@
 import {
-	ADD_TEST,
-	DELETE_TEST,
-	UPDATE_TEST,
-	FILTER_TESTS,
-	TESTS_FAIL,
-	CLEAR_TESTS,
-	GET_TESTS,
-	SET_CURRENT,
-	CLEAR_CURRENT,
-	CLEAR_FILTER,
-	CLEAR_ERRORS,
-	GET_USERS
+	ADD_ASSIGNMENT,
+	DELETE_ASSIGNMENT,
+	GET_ASSIGNMENT,
+	UPDATE_ASSIGNMENT,
+	CLEAR_ASSIGNMENT,
+	ASSIGNMENTS_FAIL,
+	CLEAR_ERRORS
 } from '../types';
 
 export default (state, action) => {
 	switch (action.type) {
-		case ADD_TEST:
+		case ADD_ASSIGNMENT:
 			return {
 				...state,
-				tests   : [ action.payload, ...state.tests ],
-				loading : false
+				assignments : [ action.payload, ...state.assignments ],
+				loading     : false
 			};
 
-		case GET_TESTS:
+		case GET_ASSIGNMENT:
 			return {
 				...state,
-				tests   : action.payload,
-				loading : false
+				assignments : action.payload,
+				loading     : false
 			};
 
-		case DELETE_TEST:
+		case DELETE_ASSIGNMENT:
 			return {
 				...state,
 				error   : action.payload.msg,
 				loading : false
 			};
 
-		case UPDATE_TEST:
+		case UPDATE_ASSIGNMENT:
 			return {
 				...state,
 				error   : action.payload.msg,
 				loading : false
-			};
-
-		case GET_USERS:
-			return {
-				...state,
-				users_list : action.payload,
-				loading    : false
-			};
-
-		case SET_CURRENT:
-			return {
-				...state,
-				current : action.payload
-			};
-
-		case CLEAR_CURRENT:
-			return {
-				...state,
-				current : null
-			};
-
-		case FILTER_TESTS:
-			return {
-				...state,
-				filtered : state.tests.filter((test) => {
-					const regex = new RegExp(`${action.payload}`, 'gi');
-					return test.name.match(regex) || test.parts.body.match(regex);
-				})
-			};
-
-		case CLEAR_FILTER:
-			return {
-				...state,
-				filtered : null
 			};
 
 		case CLEAR_ERRORS:
@@ -83,7 +44,7 @@ export default (state, action) => {
 				error : null
 			};
 
-		case CLEAR_TESTS:
+		case CLEAR_ASSIGNMENT:
 			return {
 				tests    : null,
 				current  : null,
@@ -92,7 +53,7 @@ export default (state, action) => {
 				loading  : false
 			};
 
-		case TESTS_FAIL:
+		case ASSIGNMENTS_FAIL:
 			return {
 				...state,
 				error : action.payload

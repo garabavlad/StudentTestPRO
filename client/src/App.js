@@ -11,7 +11,7 @@ import Login from './components/auth/Login';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/routing/PrivateRoute';
 
-import ContactState from './context/contact/ContactState';
+import AssignmentsState from './context/assignments/AssignmentsState';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 import AdminState from './context/adminTest/AdminState';
@@ -26,7 +26,7 @@ function App() {
 		<AuthState>
 			<AlertState>
 				<AdminState>
-					<ContactState>
+					<AssignmentsState>
 						<Router>
 							<Fragment>
 								<Navbar />
@@ -42,7 +42,7 @@ function App() {
 								</div>
 							</Fragment>
 						</Router>
-					</ContactState>
+					</AssignmentsState>
 				</AdminState>
 			</AlertState>
 		</AuthState>

@@ -23,13 +23,13 @@ router.get('/:id', auth, async (req, res) => {
 // @desc        Adds new assignment
 // @access      Admin
 router.post('/', auth, async (req, res) => {
-	const { user, test } = req.body;
+	const { user, testList } = req.body;
 
 	try {
 		//creating new assignment
 		const newAssignment = new Assignment({
 			user,
-			test
+			testList
 		});
 
 		await newAssignment.save();

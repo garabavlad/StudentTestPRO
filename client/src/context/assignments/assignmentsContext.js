@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const adminContext = createContext();
+const assignmentContext = createContext();
 
-export default adminContext;
+export default assignmentContext;
