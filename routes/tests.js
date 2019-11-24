@@ -38,7 +38,7 @@ router.post('/', [ auth, [ check('name', 'Please enter a valid name').not().isEm
 	const { name, subtests } = req.body;
 
 	try {
-		//creating new contact
+		//creating new test
 		const newContact = new Test({
 			name,
 			subtests
@@ -53,8 +53,8 @@ router.post('/', [ auth, [ check('name', 'Please enter a valid name').not().isEm
 	}
 });
 
-// @route       PUT api/contacts/:id
-// @desc        Updates a contact
+// @route       PUT api/tests/:id
+// @desc        Updates a test
 // @access      Private
 router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().isEmpty() ] ], async (req, res) => {
 	if (!req.user.isAdmin) {
@@ -92,8 +92,8 @@ router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().is
 	}
 });
 
-// @route       DELETE api/contacts/:id
-// @desc        Deletes a contact
+// @route       DELETE api/tests/:id
+// @desc        Deletes a test
 // @access      Private
 router.delete('/:id', auth, async (req, res) => {
 	if (!req.user.isAdmin) {
@@ -105,10 +105,6 @@ router.delete('/:id', auth, async (req, res) => {
 		if (!dbTest) {
 			return res.status(404).json({ msg: 'Test not found' });
 		}
-
-		// if (dbContact.user.toString() !== req.user.id) {
-		// 	return res.status(400).json({ msg: 'Not authorized' });
-		// }
 
 		await Test.findByIdAndDelete(req.params.id);
 

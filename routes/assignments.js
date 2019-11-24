@@ -10,12 +10,15 @@ const router = express.Router();
 // @desc        Get user assignments
 // @access      Admin
 router.get('/:id', auth, async (req, res) => {
+	if (!req.user.isAdmin) {
+		throw new Error('user is not admin');
+	}
 	try {
 		const assignments = await Assignment.find({ user: req.params.id });
 		return res.json(assignments);
 	} catch (err) {
 		console.error(err.message);
-		return res.status(500).send('Server Error');
+		return res.status(500).json({ msg: 'Server Error' });
 	}
 });
 
@@ -23,6 +26,9 @@ router.get('/:id', auth, async (req, res) => {
 // @desc        Adds new assignment
 // @access      Admin
 router.post('/', auth, async (req, res) => {
+	if (!req.user.isAdmin) {
+		throw new Error('user is not admin');
+	}
 	const { user, testList } = req.body;
 
 	try {
@@ -33,18 +39,21 @@ router.post('/', auth, async (req, res) => {
 		});
 
 		await newAssignment.save();
+
+		return res.json({ msg: 'Assignment added successfully!' });
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send('Server Error');
+		return res.status(500).json({ msg: 'Server Error' });
 	}
-
-	return res.send('Assignments set successfully!');
 });
 
 // @route       PUT api/assignments/:id
 // @desc        Updates a assignment
 // @access      Admin
-router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().isEmpty() ] ], async (req, res) => {
+router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEmpty() ] ], async (req, res) => {
+	if (!req.user.isAdmin) {
+		throw new Error('user is not admin');
+	}
 	//validation result
 	const errs = validationResult(req);
 	if (!errs.isEmpty()) {
@@ -58,25 +67,17 @@ router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().is
 			return res.status(404).json({ msg: 'Assignment not found' });
 		}
 
-		if (dbAssignment.user.toString() !== req.user.id) {
-			return res.status(400).json({ msg: 'Not authorized' });
-		}
+		console.log(req.body);
 
-		const { name, email, phone, type } = req.body;
+		const testList = req.body.testList;
 
-		const assignmentFields = {};
-		if (name) assignmentFields.name = name;
-		if (email) assignmentFields.email = email;
-		if (type) assignmentFields.type = type;
-		if (phone) assignmentFields.phone = phone;
-
-		const assignment = await Assignment.findByIdAndUpdate(req.params.id, { $set: assignmentFields }, { new: true });
+		if (testList) await Assignment.findByIdAndUpdate(req.params.id, { $set: { testList } }, { new: true });
 
 		res.json({ msg: 'Assignment updated sucessfully' });
 		// res.json(assignment);
 	} catch (err) {
 		console.error(err.message);
-		return res.status(500).send('Server Error');
+		return res.status(500).json({ msg: 'Server Error' });
 	}
 });
 
@@ -84,6 +85,10 @@ router.put('/:id', [ auth, [ check('name', 'Please enter a valid name').not().is
 // @desc        Deletes a assignment
 // @access      Admin
 router.delete('/:id', auth, async (req, res) => {
+	if (!req.user.isAdmin) {
+		throw new Error('user is not admin');
+	}
+
 	try {
 		const dbAssignment = await Assignment.findById(req.params.id);
 
@@ -91,16 +96,12 @@ router.delete('/:id', auth, async (req, res) => {
 			return res.status(404).json({ msg: 'Assignment not found' });
 		}
 
-		if (dbAssignment.user.toString() !== req.user.id) {
-			return res.status(400).json({ msg: 'Not authorized' });
-		}
-
 		await Assignment.findByIdAndDelete(req.params.id);
 
 		res.json({ msg: 'Assignment deleted sucessfully' });
 	} catch (err) {
 		console.error(err.message);
-		return res.status(500).send('Server Error');
+		return res.status(500).json({ msg: 'Server Error' });
 	}
 });
 

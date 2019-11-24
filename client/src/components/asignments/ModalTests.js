@@ -10,7 +10,7 @@ const ModalTests = (props) => {
 						<input
 							type='checkbox'
 							value={test._id}
-							checked={selected.find((id) => id === test._id)}
+							checked={selected && selected.find((id) => id === test._id)}
 							onChange={onChange.bind(this, test._id)}
 						/>
 						<span style={{ marginLeft: '5px', fontSize: '18px' }}>{' ' + test.name}</span>

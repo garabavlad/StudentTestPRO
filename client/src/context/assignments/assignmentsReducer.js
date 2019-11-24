@@ -11,32 +11,26 @@ import {
 export default (state, action) => {
 	switch (action.type) {
 		case ADD_ASSIGNMENT:
+		case UPDATE_ASSIGNMENT:
 			return {
 				...state,
-				assignments : [ action.payload, ...state.assignments ],
-				loading     : false
+				error   : action.payload.msg,
+				loading : false
 			};
 
 		case GET_ASSIGNMENT:
-			const assigs = action.payload[0] ? action.payload[0].testList : null;
 			return {
 				...state,
-				assignments : assigs,
+				assignments : action.payload[0],
 				loading     : false
 			};
 
 		case DELETE_ASSIGNMENT:
 			return {
 				...state,
-				error   : action.payload.msg,
-				loading : false
-			};
-
-		case UPDATE_ASSIGNMENT:
-			return {
-				...state,
-				error   : action.payload.msg,
-				loading : false
+				error       : action.payload.msg,
+				loading     : false,
+				assignments : null
 			};
 
 		case CLEAR_ERRORS:
@@ -57,7 +51,7 @@ export default (state, action) => {
 		case ASSIGNMENTS_FAIL:
 			return {
 				...state,
-				error : action.payload
+				error : action.payload.msg
 			};
 
 		default:

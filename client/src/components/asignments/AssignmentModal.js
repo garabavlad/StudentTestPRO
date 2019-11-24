@@ -10,7 +10,7 @@ const AssignmentModal = () => {
 	const assignmentModal = useContext(AssignmentsContext);
 
 	const { getUsers, users_list, tests } = adminContext;
-	const { getAssignments, assignments } = assignmentModal;
+	const { getAssignments, assignments, addAssignment, updateAssignment, deleteAssignment } = assignmentModal;
 
 	const [ selectedUser, setSelectedUser ] = useState(null);
 	const [ selectedTests, setSelectedTests ] = useState([]);
@@ -23,20 +23,17 @@ const AssignmentModal = () => {
 		// eslint-disable-next-line
 		[]
 	);
-	// Setting selected tests as assignments change
+	// Setting selected tests as assignments obj change
 	useEffect(
 		() => {
-			setSelectedTests(assignments ? assignments : []);
+			setSelectedTests(assignments ? assignments.testList : []);
 		},
 		[ assignments ]
 	);
 
 	const onChangeUsers = (_id) => {
 		setSelectedUser(_id);
-
-		//GETTING ASSIGNMENTS AND LINK THEM TO SELECTED TESTS LIST
 		getAssignments(_id);
-		// setSelectedTests(assignments ? assignments : []);
 	};
 
 	const onChangeTests = (changedTestId) => {
@@ -54,7 +51,39 @@ const AssignmentModal = () => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 
-		console.log(e.target);
+		//some pre Context logic
+		if (selectedUser) {
+			if (selectedTests.length < 1) {
+				if (assignments && assignments.testList) {
+					// Case : No selected tests but it had before
+					// Use : Delete Assignment
+					deleteAssignment(assignments._id);
+				}
+				else {
+					// Case : No selected tests and it did not have any before
+					// Use : Ignore
+					// -------
+					// @todo : alert display no tests selected
+				}
+			}
+			else {
+				if (assignments && assignments.testList) {
+					// Case : There are selected tests and it had before
+					// Use : Edit assignment
+					const newAssignment = {
+						...assignments,
+						testList : selectedTests
+					};
+					updateAssignment(newAssignment);
+				}
+				else {
+					// Case : There are selected tests but it did not have any before
+					// Use : Add assignment
+					addAssignment(selectedUser, selectedTests);
+				}
+			}
+		}
+		// else return error == No user selected
 	};
 
 	const onClickRevoke = (e) => setSelectedTests([]);
@@ -82,6 +111,7 @@ const AssignmentModal = () => {
 									type='button'
 									value={'Revoca testele'}
 									className='btn btn-primary btn-block'
+									style={{ font: 'inherit' }}
 									onClick={onClickRevoke}
 								/>
 							</div>
