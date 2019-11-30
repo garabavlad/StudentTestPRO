@@ -48,7 +48,6 @@ const AdminState = (props) => {
 
 	//GET TESTS
 	const getTests = async () => {
-		console.log('get');
 		try {
 			const res = await axios.get('/api/tests');
 
@@ -60,8 +59,6 @@ const AdminState = (props) => {
 
 	//GET USERS (NO ADMINS)
 	const getUsers = async () => {
-		console.log('getusrs');
-
 		try {
 			const res = await axios.get('/api/users');
 
@@ -85,8 +82,6 @@ const AdminState = (props) => {
 
 	//UPDATE TEST
 	const updateTest = async (test) => {
-		console.log('upd');
-
 		try {
 			const config = {
 				headers : {
@@ -105,42 +100,31 @@ const AdminState = (props) => {
 
 	//SET CURRENT TEST
 	const setCurrent = (test) => {
-		console.log('setcurre');
-
 		dispatch({ type: SET_CURRENT, payload: test });
 	};
 
 	//CLEAR CURRENT TEST
 	const clearCurrent = () => {
-		console.log('clearcurre');
-
 		dispatch({ type: CLEAR_CURRENT });
 	};
 
 	//FILTER TESTS
 	const filterTests = (text) => {
-		console.log('filter');
-
 		dispatch({ type: FILTER_TESTS, payload: text });
 	};
 
 	//CLEAR FILTER
 	const clearFilter = () => {
-		console.log('clearfiltr');
-
 		dispatch({ type: CLEAR_FILTER });
 	};
 
 	//CLEAR ERRORS
 	const clearErrors = () => {
-		console.log('clearerrs');
 		dispatch({ type: CLEAR_ERRORS });
 	};
 
 	//CLEAR TESTS or  ON LOGOUT
 	const clearTests = () => {
-		console.log('clrstst');
-
 		dispatch({ type: CLEAR_TESTS });
 	};
 

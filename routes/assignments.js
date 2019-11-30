@@ -10,10 +10,11 @@ const router = express.Router();
 // @desc        Get user assignments
 // @access      Admin
 router.get('/:id', auth, async (req, res) => {
-	if (!req.user.isAdmin) {
-		throw new Error('user is not admin');
-	}
 	try {
+		if (!req.user.isAdmin) {
+			throw new Error('user is not admin');
+		}
+
 		const assignments = await Assignment.find({ user: req.params.id });
 		return res.json(assignments);
 	} catch (err) {
@@ -26,12 +27,14 @@ router.get('/:id', auth, async (req, res) => {
 // @desc        Adds new assignment
 // @access      Admin
 router.post('/', auth, async (req, res) => {
-	if (!req.user.isAdmin) {
-		throw new Error('user is not admin');
-	}
-	const { user, testList } = req.body;
-
+	
 	try {
+		if (!req.user.isAdmin) {
+			throw new Error('user is not admin');
+		}
+
+		const { user, testList } = req.body;
+
 		//creating new assignment
 		const newAssignment = new Assignment({
 			user,
@@ -51,16 +54,18 @@ router.post('/', auth, async (req, res) => {
 // @desc        Updates a assignment
 // @access      Admin
 router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEmpty() ] ], async (req, res) => {
-	if (!req.user.isAdmin) {
-		throw new Error('user is not admin');
-	}
-	//validation result
-	const errs = validationResult(req);
-	if (!errs.isEmpty()) {
-		return res.status(400).json({ errors: errs.array() });
-	}
-
+	
 	try {
+		if (!req.user.isAdmin) {
+			throw new Error('user is not admin');
+		}
+
+		//validation result
+		const errs = validationResult(req);
+		if (!errs.isEmpty()) {
+			return res.status(400).json({ errors: errs.array() });
+		}
+
 		const dbAssignment = await Assignment.findById(req.params.id);
 
 		if (!dbAssignment) {
@@ -85,11 +90,12 @@ router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEm
 // @desc        Deletes a assignment
 // @access      Admin
 router.delete('/:id', auth, async (req, res) => {
-	if (!req.user.isAdmin) {
-		throw new Error('user is not admin');
-	}
-
+	
 	try {
+		if (!req.user.isAdmin) {
+			throw new Error('user is not admin');
+		}
+		
 		const dbAssignment = await Assignment.findById(req.params.id);
 
 		if (!dbAssignment) {

@@ -9,8 +9,8 @@ const ResultsButton = () => {
 			style={{
 				fontSize   : '60px',
 				position   : 'fixed',
-				bottom     : '80px',
-				right      : '20px',
+				bottom     : '5px',
+				right      : '13px',
 				cursor     : 'pointer',
 				textShadow : '3px 3px 16px #272634'
 			}}

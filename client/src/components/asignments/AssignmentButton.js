@@ -7,9 +7,9 @@ const AssignmentButton = () => {
 			className='fas fa-users'
 			aria-hidden='true'
 			style={{
-				fontSize   : '60px',
+				fontSize   : '55px',
 				position   : 'fixed',
-				bottom     : '10px',
+				bottom     : '70px',
 				right      : '10px',
 				cursor     : 'pointer',
 				textShadow : '3px 3px 16px #272634'
