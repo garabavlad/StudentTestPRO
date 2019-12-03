@@ -42,11 +42,15 @@ const Test = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 
-		let result = checkResults(inputAnswers, correctAnswers);
-		result = { ...result, test: selectedTest._id };
+		let isConfirmed = window.confirm('Confirmati finisarea testului ?');
 
-		addResult(result);
-		props.history.push('/');
+		if (isConfirmed) {
+			let result = checkResults(inputAnswers, correctAnswers);
+			result = { ...result, test: selectedTest._id };
+
+			addResult(result);
+			props.history.push('/');
+		}
 	};
 
 	const onChangeCheck = (i1, i2) => {

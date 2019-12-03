@@ -3,34 +3,52 @@ import React, { useContext, useEffect, Fragment } from 'react';
 import Tests from '../adminTests/Tests';
 import TestForm from '../adminTests/TestForm';
 import TestFilter from '../adminTests/TestFilter';
-
-import AuthContext from '../../context/auth/authContext';
 import AssignmentButton from '../asignments/AssignmentButton';
 import AssignmentModal from '../asignments/AssignmentModal';
 import ResultsButton from '../results/ResultsButton';
 import ResultsModal from '../results/ResultsModal';
-//import AlertContext from '../../context/alert/alertContext';
+
+import AuthContext from '../../context/auth/authContext';
+import AdminContext from '../../context/adminTest/adminContext';
+import AlertContext from '../../context/alert/alertContext';
 
 export const Admin = (props) => {
 	const authContext = useContext(AuthContext);
-	//const alertContext = useContext(AlertContext);
+	const adminContext = useContext(AdminContext);
+	const alertContext = useContext(AlertContext);
 
-	const { loadUser, isAdmin } = authContext;
-	//const { error, setAlert, clearErrors } = alertContext;
+	const { loadUser, isAdmin, user } = authContext;
+	const { error, clearErrors } = adminContext;
+	const { setAlert } = alertContext;
 
 	useEffect(
 		() => {
-			loadUser();
+			if (!user) loadUser();
 
 			if (isAdmin === false) {
 				props.history.push('/');
 			}
 
+			//Displaying alerts
+			if (error === 'Contact updated sucessfully') {
+				setAlert('Testul a fost editat cu succes', 'success');
+			}
+			if (error === 'Contact deleted sucessfully') {
+				setAlert('Testul a fost sters cu succes', 'success');
+			}
+			if (error === 'Testul a fost adaugat cu succes') {
+				setAlert(error, 'success');
+			}
+			if (error === 'Contact updated sucessfully') {
+				setAlert('Testul a fost editat cu succes', 'success');
+			}
+			clearErrors();
+
 			// Some js for handling the modal
 			handleModal();
 		},
 		// eslint-disable-next-line
-		[ isAdmin ]
+		[ isAdmin, error ]
 	);
 
 	return (

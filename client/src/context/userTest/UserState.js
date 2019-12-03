@@ -30,29 +30,20 @@ const UserState = (props) => {
 
 	//GET TESTS
 	const getTests = async (userId) => {
-		console.log('In USERSTATE Get');
 		try {
 			const res = await axios.get(`/api/tests/${userId}`);
 
 			dispatch({ type: GET_TESTS, payload: res.data });
 		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: TESTS_FAIL, payload: err.response.data });
 		}
 	};
 
 	//SET SELECTED TEST
-	const setSelected = (test) => {
-		console.log('setSelect');
-
-		dispatch({ type: SET_SELECTED_TEST, payload: test });
-	};
+	const setSelected = (test) => dispatch({ type: SET_SELECTED_TEST, payload: test });
 
 	//CLEAR SELECTED TEST
-	const clearSelected = () => {
-		console.log('clearSelect');
-
-		dispatch({ type: CLEAR_SELECTED_TEST });
-	};
+	const clearSelected = () => dispatch({ type: CLEAR_SELECTED_TEST });
 
 	//GET USER RESULTS
 	const getResults = async (id) => {
@@ -61,7 +52,7 @@ const UserState = (props) => {
 
 			dispatch({ type: GET_RESULTS, payload: res.data });
 		} catch (err) {
-			dispatch({ type: RESULTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: RESULTS_FAIL, payload: err.response.data });
 		}
 	};
 
@@ -78,36 +69,21 @@ const UserState = (props) => {
 
 			dispatch({ type: ADD_RESULT, payload: res.data });
 		} catch (err) {
-			dispatch({ type: RESULTS_FAIL, payload: err.response.data.msg });
+			dispatch({ type: RESULTS_FAIL, payload: err.response.data });
 		}
 	};
 
 	//SET FILTERED
-	const setFiltered = (text) => {
-		console.log('filter');
-
-		dispatch({ type: FILTER_TESTS, payload: text });
-	};
+	const setFiltered = (text) => dispatch({ type: FILTER_TESTS, payload: text });
 
 	//CLEAR FILTERED
-	const clearFiltered = () => {
-		console.log('clearFilt');
-
-		dispatch({ type: CLEAR_FILTER });
-	};
+	const clearFiltered = () => dispatch({ type: CLEAR_FILTER });
 
 	//CLEAR ERRORS
-	const clearErrors = () => {
-		console.log('clearerrs');
-		dispatch({ type: CLEAR_ERRORS });
-	};
+	const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
 	//CLEAR TESTS or  ON LOGOUT
-	const clearTests = () => {
-		console.log('clrstst');
-
-		dispatch({ type: CLEAR_TESTS });
-	};
+	const clearTests = () => dispatch({ type: CLEAR_TESTS });
 
 	return (
 		<userContext.Provider

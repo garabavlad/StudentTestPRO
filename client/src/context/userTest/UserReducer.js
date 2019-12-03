@@ -75,7 +75,7 @@ export default (state, action) => {
 		case ADD_RESULT:
 			return {
 				...state,
-				error : action.payload
+				error : action.payload.msg
 			};
 
 		default:

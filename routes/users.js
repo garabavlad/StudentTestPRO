@@ -86,7 +86,7 @@ router.get('/', auth, async (req, res) => {
 		if (!req.user.isAdmin) {
 			throw new Error('user is not admin');
 		}
-		const users = await User.find({}).sort({ name: -1 });
+		const users = await User.find({}).sort({ name: 1 });
 
 		let noAdminUsers = [];
 		users.map((usr) => {

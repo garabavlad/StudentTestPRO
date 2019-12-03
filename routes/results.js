@@ -79,8 +79,6 @@ router.post('/', auth, async (req, res) => {
 // 			return res.status(404).json({ msg: 'Result not found' });
 // 		}
 
-// 		console.log(req.body);
-
 // 		const testList = req.body.testList;
 
 // 		if (testList) await Result.findByIdAndUpdate(req.params.id, { $set: { testList } }, { new: true });

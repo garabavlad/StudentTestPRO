@@ -14,7 +14,10 @@ import {
 	CLEAR_CURRENT,
 	CLEAR_FILTER,
 	CLEAR_ERRORS,
-	GET_USERS
+	GET_USERS,
+	GET_RESULTS,
+	DELETE_RESULT,
+	RESULTS_FAIL
 } from '../types';
 
 const AdminState = (props) => {
@@ -24,7 +27,8 @@ const AdminState = (props) => {
 		filtered   : null,
 		error      : null,
 		loading    : true,
-		users_list : null
+		users_list : null,
+		results    : null
 	};
 
 	const [ state, dispatch ] = useReducer(adminReducer, initialState);
@@ -52,17 +56,6 @@ const AdminState = (props) => {
 			const res = await axios.get('/api/tests');
 
 			dispatch({ type: GET_TESTS, payload: res.data });
-		} catch (err) {
-			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
-		}
-	};
-
-	//GET USERS (NO ADMINS)
-	const getUsers = async () => {
-		try {
-			const res = await axios.get('/api/users');
-
-			dispatch({ type: GET_USERS, payload: res.data });
 		} catch (err) {
 			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
 		}
@@ -118,6 +111,40 @@ const AdminState = (props) => {
 		dispatch({ type: CLEAR_FILTER });
 	};
 
+	//GET USERS (NO ADMINS)
+	const getUsers = async () => {
+		try {
+			const res = await axios.get('/api/users');
+
+			dispatch({ type: GET_USERS, payload: res.data });
+		} catch (err) {
+			dispatch({ type: TESTS_FAIL, payload: err.response.data.msg });
+		}
+	};
+
+	//GET ALL RESULTS
+	const getResults = async () => {
+		try {
+			const res = await axios.get('/api/results');
+
+			dispatch({ type: GET_RESULTS, payload: res.data });
+		} catch (err) {
+			dispatch({ type: RESULTS_FAIL, payload: err.response.data.msg });
+		}
+	};
+
+	//DELETE RESULT
+	const deleteResult = async (_id) => {
+		try {
+			const res = await axios.delete(`/api/results/${_id}`);
+
+			dispatch({ type: DELETE_RESULT, payload: res.data });
+			getResults();
+		} catch (err) {
+			dispatch({ type: RESULTS_FAIL, payload: err.response.data.msg });
+		}
+	};
+
 	//CLEAR ERRORS
 	const clearErrors = () => {
 		dispatch({ type: CLEAR_ERRORS });
@@ -137,6 +164,7 @@ const AdminState = (props) => {
 				error        : state.error,
 				loading      : state.loading,
 				users_list   : state.users_list,
+				results      : state.results,
 
 				addTest,
 				deleteTest,
@@ -148,7 +176,9 @@ const AdminState = (props) => {
 				getTests,
 				clearErrors,
 				clearTests,
-				getUsers
+				getUsers,
+				getResults,
+				deleteResult
 			}}>
 			{props.children}
 		</adminContext.Provider>

@@ -21,7 +21,7 @@ const Login = (props) => {
 			}
 
 			if (error === 'Invalid email and / or password') {
-				setAlert(error, 'danger');
+				setAlert('Email sau parola invalida', 'danger');
 
 				clearErrors();
 			}
@@ -41,9 +41,9 @@ const Login = (props) => {
 		e.preventDefault();
 
 		if (email === '' || password === '') {
-			setAlert('Please complete all fields', 'danger');
+			setAlert('Completati toate campurile', 'danger');
 		}
-		else if (password.length < 6) setAlert('Password have to be more than 6 characters', 'danger');
+		else if (password.length < 6) setAlert('Parola trebuie sa fie de minim 6 caractere', 'danger');
 		else
 			login({
 				email,

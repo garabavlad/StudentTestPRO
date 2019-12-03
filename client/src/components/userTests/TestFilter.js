@@ -1,9 +1,9 @@
 import React, { useContext, useRef, useEffect } from 'react';
-import AdminContext from '../../context/adminTest/adminContext';
+import UserContext from '../../context/userTest/userContext';
 
 const TestFilter = () => {
-	const adminContext = useContext(AdminContext);
-	const { filterTests, clearFilter, filtered } = adminContext;
+	const userContext = useContext(UserContext);
+	const { setFiltered, clearFiltered, filtered } = userContext;
 
 	const text = useRef('');
 
@@ -13,10 +13,10 @@ const TestFilter = () => {
 
 	const onChange = () => {
 		if (text.current.value !== '') {
-			filterTests(text.current.value);
+			setFiltered(text.current.value);
 		}
 		else {
-			clearFilter();
+			clearFiltered();
 		}
 	};
 

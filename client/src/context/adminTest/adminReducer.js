@@ -10,7 +10,10 @@ import {
 	CLEAR_CURRENT,
 	CLEAR_FILTER,
 	CLEAR_ERRORS,
-	GET_USERS
+	GET_USERS,
+	RESULTS_FAIL,
+	GET_RESULTS,
+	DELETE_RESULT
 } from '../types';
 
 export default (state, action) => {
@@ -18,8 +21,9 @@ export default (state, action) => {
 		case ADD_TEST:
 			return {
 				...state,
-				tests   : [ action.payload, ...state.tests ],
-				loading : false
+				tests   : [ ...state.tests, action.payload ],
+				loading : false,
+				error   : 'Testul a fost adaugat cu succes'
 			};
 
 		case GET_TESTS:
@@ -30,24 +34,12 @@ export default (state, action) => {
 			};
 
 		case DELETE_TEST:
-			return {
-				...state,
-				error   : action.payload.msg,
-				loading : false
-			};
-
 		case UPDATE_TEST:
+		case DELETE_RESULT:
 			return {
 				...state,
 				error   : action.payload.msg,
 				loading : false
-			};
-
-		case GET_USERS:
-			return {
-				...state,
-				users_list : action.payload,
-				loading    : false
 			};
 
 		case SET_CURRENT:
@@ -67,7 +59,7 @@ export default (state, action) => {
 				...state,
 				filtered : state.tests.filter((test) => {
 					const regex = new RegExp(`${action.payload}`, 'gi');
-					return test.name.match(regex) || test.parts.body.match(regex);
+					return test.name.match(regex);
 				})
 			};
 
@@ -92,7 +84,21 @@ export default (state, action) => {
 				loading  : false
 			};
 
+		case GET_USERS:
+			return {
+				...state,
+				users_list : action.payload,
+				loading    : false
+			};
+
+		case GET_RESULTS:
+			return {
+				...state,
+				results : action.payload
+			};
+
 		case TESTS_FAIL:
+		case RESULTS_FAIL:
 			return {
 				...state,
 				error : action.payload

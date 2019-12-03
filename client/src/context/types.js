@@ -31,3 +31,4 @@ export const ADD_RESULT = 'ADD_RESULT';
 export const GET_RESULTS = 'GET_RESULTS';
 export const CLEAR_RESULTS = 'CLEAR_RESULTS';
 export const RESULTS_FAIL = 'RESULTS_FAIL';
+export const DELETE_RESULT = 'DELETE_RESULT';

@@ -27,7 +27,6 @@ router.get('/:id', auth, async (req, res) => {
 // @desc        Adds new assignment
 // @access      Admin
 router.post('/', auth, async (req, res) => {
-	
 	try {
 		if (!req.user.isAdmin) {
 			throw new Error('user is not admin');
@@ -54,7 +53,6 @@ router.post('/', auth, async (req, res) => {
 // @desc        Updates a assignment
 // @access      Admin
 router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEmpty() ] ], async (req, res) => {
-	
 	try {
 		if (!req.user.isAdmin) {
 			throw new Error('user is not admin');
@@ -72,8 +70,6 @@ router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEm
 			return res.status(404).json({ msg: 'Assignment not found' });
 		}
 
-		console.log(req.body);
-
 		const testList = req.body.testList;
 
 		if (testList) await Assignment.findByIdAndUpdate(req.params.id, { $set: { testList } }, { new: true });
@@ -90,12 +86,11 @@ router.put('/:id', [ auth, [ check('testList', 'Test List is emplty').not().isEm
 // @desc        Deletes a assignment
 // @access      Admin
 router.delete('/:id', auth, async (req, res) => {
-	
 	try {
 		if (!req.user.isAdmin) {
 			throw new Error('user is not admin');
 		}
-		
+
 		const dbAssignment = await Assignment.findById(req.params.id);
 
 		if (!dbAssignment) {

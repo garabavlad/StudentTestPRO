@@ -1,16 +1,20 @@
 import React, { useEffect, useContext, useState } from 'react';
 
-import AdminContext from '../../context/adminTest/adminContext';
-import AssignmentsContext from '../../context/assignments/assignmentsContext';
 import ModalUsers from './ModalUsers';
 import ModalTests from './ModalTests';
+
+import AdminContext from '../../context/adminTest/adminContext';
+import AssignmentsContext from '../../context/assignments/assignmentsContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const AssignmentModal = () => {
 	const adminContext = useContext(AdminContext);
 	const assignmentModal = useContext(AssignmentsContext);
+	const alertContext = useContext(AlertContext);
 
 	const { getUsers, users_list, tests } = adminContext;
 	const { getAssignments, assignments, addAssignment, updateAssignment, deleteAssignment } = assignmentModal;
+	const { setAlert } = alertContext;
 
 	const [ selectedUser, setSelectedUser ] = useState(null);
 	const [ selectedTests, setSelectedTests ] = useState([]);
@@ -58,12 +62,12 @@ const AssignmentModal = () => {
 					// Case : No selected tests but it had before
 					// Use : Delete Assignment
 					deleteAssignment(assignments._id);
+					setAlert('Testele utilizatorului au fost sterse cu succes', 'success');
 				}
 				else {
 					// Case : No selected tests and it did not have any before
 					// Use : Ignore
-					// -------
-					// @todo : alert display no tests selected
+					setAlert('Nu a fost selectat nici un test', 'danger');
 				}
 			}
 			else {
@@ -75,15 +79,20 @@ const AssignmentModal = () => {
 						testList : selectedTests
 					};
 					updateAssignment(newAssignment);
+					setAlert('Testele utilizatorului au fost editate cu succes', 'success');
 				}
 				else {
 					// Case : There are selected tests but it did not have any before
 					// Use : Add assignment
 					addAssignment(selectedUser, selectedTests);
+					setAlert('Testele utilizatorului au fost adaugate cu succes', 'success');
 				}
 			}
 		}
-		// else return error == No user selected
+		else setAlert('Nu a fost selectat nici un utilizator', 'danger');
+
+		// hiding Assignment modal
+		document.getElementById('assignmentModal').style.display = 'none';
 	};
 
 	const onClickRevoke = (e) => setSelectedTests([]);
@@ -99,14 +108,16 @@ const AssignmentModal = () => {
 					<form onSubmit={onSubmit}>
 						<div className='grid-2'>
 							<div>
+								<h2>Utilizatori</h2>
 								<ModalUsers users={users_list} onChange={onChangeUsers} selected={selectedUser} />
 							</div>
 							<div>
+								<h2>Teste</h2>
 								<ModalTests tests={tests} onChange={onChangeTests} selected={selectedTests} />
 							</div>
 						</div>
 						<div className='grid-2'>
-							<div>
+							<div className='revoke-btn'>
 								<input
 									type='button'
 									value={'Revoca testele'}

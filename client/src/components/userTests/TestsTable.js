@@ -1,12 +1,7 @@
-import React, { Fragment, useContext } from 'react';
-
-import UserContext from '../../context/userTest/userContext';
+import React, { Fragment } from 'react';
 
 const TestsTable = (props) => {
-	const userContext = useContext(UserContext);
-
-	const { tests, results } = userContext;
-	const { onClick } = props;
+	const { onClick, results, tests } = props;
 
 	return (
 		<Fragment>

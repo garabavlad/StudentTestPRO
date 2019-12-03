@@ -9,7 +9,7 @@ const ResultsTable = (props) => {
 	const { results } = props;
 
 	return (
-		<table style={{ width: '100%' }}>
+		<table style={{ width: '100%', background: 'white' }}>
 			<tbody>
 				<tr>
 					<th>Numele Testului</th>

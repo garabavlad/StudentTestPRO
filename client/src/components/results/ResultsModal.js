@@ -1,24 +1,30 @@
 import React, { useContext, useEffect } from 'react';
 import UserResultsTable from '../userTests/ResultsTable';
 import AdminResultsTable from '../adminTests/ResultsTable';
+import Spinner from '../layouts/Spinner';
 
 import AuthContext from '../../context/auth/authContext';
 import UserContext from '../../context/userTest/userContext';
 import AdminContext from '../../context/adminTest/adminContext';
-import Spinner from '../layouts/Spinner';
 
 const ResultsModal = () => {
 	const authContext = useContext(AuthContext);
 	const userContext = useContext(UserContext);
 	const adminContext = useContext(AdminContext);
 
-	const { isAdmin } = authContext;
+	const { isAdmin, loadUser, user } = authContext;
 	const userResults = userContext.results;
-	// const adminResults = adminContext.results;
-	const adminResults = null;
+	const userGetResults = userContext.getResults;
+	const adminResults = adminContext.results;
+	const adminGetResults = adminContext.getResults;
 
 	useEffect(
-		() => {},
+		() => {
+			if (!user) loadUser();
+
+			user && !isAdmin && userGetResults(user._id);
+			user && isAdmin && adminGetResults();
+		},
 		// eslint-disable-next-line
 		[]
 	);
@@ -34,7 +40,7 @@ const ResultsModal = () => {
 					{userResults === null && adminResults === null ? (
 						<Spinner />
 					) : isAdmin ? (
-						<AdminResultsTable /* results={adminResults} */ />
+						<AdminResultsTable results={adminResults} />
 					) : (
 						<UserResultsTable results={userResults} />
 					)}

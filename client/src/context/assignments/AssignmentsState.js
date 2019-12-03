@@ -37,7 +37,6 @@ const AssignmentState = (props) => {
 			getAssignments(user);
 		} catch (err) {
 			console.error(err);
-			console.log(err.response);
 			dispatch({ type: ASSIGNMENTS_FAIL, payload: err.response.data });
 		}
 	};

@@ -8,13 +8,14 @@ import ResultsModal from '../results/ResultsModal';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import UserContext from '../../context/userTest/userContext';
+import TestFilter from '../userTests/TestFilter';
 
 const Home = (props) => {
 	const authContext = useContext(AuthContext);
 	const alertContext = useContext(AlertContext);
 	const userContext = useContext(UserContext);
 
-	const { error, clearErrors, loading, getTests, tests, setSelected, getResults } = userContext;
+	const { error, clearErrors, loading, getTests, tests, setSelected, getResults, results, filtered } = userContext;
 	const { setAlert } = alertContext;
 	const { loadUser, isAdmin, user } = authContext;
 
@@ -32,21 +33,27 @@ const Home = (props) => {
 			user && getResults(user._id);
 
 			//Displaying alerts
-			if (error === 'Test updated sucessfully' || error === 'Test deleted sucessfully') {
-				setAlert(error, 'success');
+			if (error === 'Result added successfully!') {
+				setAlert('Testul a fost confirmat! Verificati rezultatele', 'success');
 			}
 			clearErrors();
 
 			//modal handling
-			handleModal();
+			!loading && handleModal();
 		},
 		// eslint-disable-next-line
-		[ error, isAdmin, user ]
+		[ error, isAdmin, user, loading ]
 	);
 
 	/* Case when no tests are available */
 	if (tests && tests.length === 0 && !loading) {
-		return <div className='card bg-light text-center user-card'>Momentan, nu ti s-a atribuit nici un test</div>;
+		return (
+			<Fragment>
+				{!loading && <ResultsModal />}
+				<div className='card bg-light text-center user-card'>Momentan, nu ti s-a atribuit nici un test</div>
+				<ResultsButton />
+			</Fragment>
+		);
 	}
 
 	const onClickTest = (test) => {
@@ -56,10 +63,16 @@ const Home = (props) => {
 
 	return (
 		<Fragment>
-			<ResultsModal />
+			{!loading && <ResultsModal />}
 			{tests !== null && !loading ? (
 				<Fragment>
-					<TestsTable onClick={onClickTest} />
+					<TestFilter />
+
+					{filtered !== null ? (
+						<TestsTable onClick={onClickTest} tests={filtered} results={results} />
+					) : (
+						<TestsTable onClick={onClickTest} tests={tests} results={results} />
+					)}
 				</Fragment>
 			) : (
 				<Spinner />

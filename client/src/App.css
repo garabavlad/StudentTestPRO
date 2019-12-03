@@ -94,7 +94,7 @@ img {
 /* Cards */
 .card {
   padding: 1rem;
-  border: #ccc 1px dotted;
+  border: #ccc 1px solid;
   margin: 0.7rem 0;
 }
 
@@ -498,7 +498,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: auto;
   padding: 0;
   border: 1px solid #888;
-  width: 65%;
+  width: 80%;
   min-height: 50%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
   -webkit-animation-name: animatetop;
@@ -542,6 +542,39 @@ body {font-family: Arial, Helvetica, sans-serif;}
   padding: 2px 16px;
   background-color: #00768b;
   color: white;
+}
+
+.revoke-btn{
+  display: block;
+}
+
+@media screen and (max-width: 700px) {
+  .modal-header {
+    padding: 2px 16px;
+    background-color: #00768b;
+    color: white;
+    font-size: 12px;
+  }
+
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 95%;
+    min-height: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    margin-bottom: 45px;;
+  }
+
+  .revoke-btn{
+    display: none;
+  }
 }
 
 .modal-body {padding: 2px 16px;}
@@ -607,5 +640,7 @@ input[id^="spoiler"]{
   display: flex;
   align-items: center;
  }
+
+
  
 
