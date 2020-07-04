@@ -3,8 +3,8 @@ An online testing tool for students.
 
 Testing accounts:
 
-user@user.com
-user
+acc:  user@user.com
+pass: user
 
-admin@admin.com
-gotoadmin
+acc:  admin@admin.com
+pass: gotoadmin
